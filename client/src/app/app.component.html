@@ -1,0 +1,56 @@
+<section id="header">
+  <div class="container">
+    <h1>MEAN Stack P2P Video Calling</h1>
+  </div>
+</section>
+
+<section id="user-media" *ngIf="isStreamAvailable">
+  <div class="container">
+    <div id="videos">
+      <div>
+        <video id="my-video" #videoRef autoplay></video>
+        <div class="overlayText" *ngIf="myId">
+          <p id="topText">Me - {{ myId }}</p>
+        </div>
+      </div>
+      <div>
+        <video id="partner-video" #partnerVideoRef autoplay></video>
+        <div class="overlayText-right" *ngIf="callerInfo">
+          <p id="topText">Caller - {{ callerInfo }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-controls">
+      <button (click)="toggleAudio()" [ngClass]="{'active': isAudioEnabled}">
+      </button>
+      <button (click)="toggleVideo()" [ngClass]="{'active': isVideoEnabled}">
+      </button>
+      <button (click)="initScreenCapture()" [ngClass]="{'active': isScreenSharingEnabled}">
+      </button>
+      <button (click)="endCall()" class="active" *ngIf="isCallInProgress">
+      </button>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="!isStreamAvailable">
+  <h1>Something went wrong, please refresh the page.</h1>
+</section>
+
+<section
+  class="online-users"
+  *ngIf="onlineUsers?.length && !incomingCall && !isCallInProgress"
+>
+  <p>Online Users</p>
+  <button *ngFor="let user of onlineUsers" (click)="callUser(user)">
+    Call {{ user }}
+  </button>
+</section>
+
+<section id="incoming-call-notification" *ngIf="incomingCall">
+  <div>
+    <p>New Incoming call from {{ callerInfo }}</p>
+    <button (click)="acceptCall()">Accept Call</button>
+  </div>
+</section>
